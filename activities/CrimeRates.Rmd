@@ -23,12 +23,13 @@ crimes <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads
 
 ### Task 3: Use janitor to clean up the column names
 
-
+crimes <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_annual_crime.csv") |> clean_names()
 
 ### Task 4: Calculate the total crime rate for each year (picking our unit!)
 
 ```{r}
-crimes |> mutate(total_rate = grand_total/population * 10000)
+crimes |> mutate(total_rate = grand_total/population * 10000) |>
+  select(year, total_rate, grand_total, population)
 ```
 
 
@@ -36,7 +37,8 @@ crimes |> mutate(total_rate = grand_total/population * 10000)
 ### Task 5: Calculate the violent and property crime rates for each year (same unit)
 
 ```{r}
-crimes_with_rates <- crimes |> mutate(violent_rate = violent_crime_total/population * 10000, property_rate = property_crime_total/population * 10000)
+crimes_with_rates <- crimes |> mutate(violent_rate = violent_crime_total/population * 10000, property_rate = property_crime_total/population * 10000) |>
+  select(year, property_crime_total, violent_crime_total)
 ```
 
 
@@ -45,6 +47,7 @@ crimes_with_rates <- crimes |> mutate(violent_rate = violent_crime_total/populat
 
 Write a few sentences about what you found in the data. What years had the highest crime rates? What years had the lowest crime rates? Does the pattern match your expectations?
 
+The 1980s and early 1990s had the highest crime rates overall, with 1990-1996 having the highest rates of violent crime in comparison with the rest of the data. In terms of property crime rates, both periods of 1975 to 1982 and 1991 to 1996 had the most elevated rates. Violent crime as a wholehas been on a steady decline of at least less than 50% in pg county since the 2010s, with 2014 and 2020 being the years with the two lowest rates of violent crime. When it comes to overall crime rates, both 2019 and 2020 have the lowest rates, with the overall crime rate also being in consistent decline since 2008. I would say that this pattern definitely matches my expectations, as from what I've always seen in terms of crime in major east coast cities such as New York and Washington and their immidiate metro areas, crime peaked in the 1980s and 1990s and has been in pretty consistent decline since, which this data for PG County seems to also reflect.
 
 
 
