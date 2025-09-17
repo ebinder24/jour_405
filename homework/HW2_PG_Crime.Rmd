@@ -1,7 +1,7 @@
 ---
 title: "HW2 Prince George's County Crime"
 ---
-
+Eden Binder
 In this assignment, we will be working with a dataset reporting the number of crimes by month in Prince George's County, Maryland, for every month in 2024. 
 
 ### Task 1: Load the Tidyverse
@@ -9,7 +9,7 @@ In this assignment, we will be working with a dataset reporting the number of cr
 You will need to load the tidyverse library
 
 ```{r}
-
+library(tidyverse)
 ```
 
 Then you'll load the data from the web. The URL for the data is: https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/pg_crime_totals_2024.csv. You will create a dataframe called `pg_crime` that contains the data from this URL.
@@ -17,46 +17,59 @@ Then you'll load the data from the web. The URL for the data is: https://raw.git
 ### Task 2: Load the Data and Describe It
 
 ```{r}
+pg_crime <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/pg_crime_totals_2024.csv")
 ```
 ### Task 3: Describe the Data
 
 You should examine that dataframe carefully by clicking on it in the Environment tab in RStudio. Write a couple of sentences describing the categories of incidents. From a reporting standpoint, are any of the categories more important than others? Why or why not? Do any of them make the job of summarizing the data more difficult? Why or why not?
 
-ANSWER HERE
+The categories of incidents are listed in alphabetical order. They go from car accidents to the varying degrees of assault with or without a weapon and whether or not there was a shooting to stolen auto vehicles; breaking and entering, homicide, the varying degrees of robbery, sex offenses, probably such as sexual harassment or assault, and theft are also categories that are included. From a reporting standpoint I would say that the homicide as well as the assault with a shooting or assault with a weapon categories and perhaps the commercial robbery category could usually be more important given that homicides within a community usually carry a large personal impact and community members also usually want to know if assaults happen near them in the immediate aftermath, especially if it's a weapon or a shooting in a public place. A commercial robbery, especially a string of them could also affect businesses within the area. Commercial robberies may make the data harder to summarize given the variety of impact they could have, with property stolen potentially ranging from most likely hundreds to hundreds of thousands of dollars in worth. Sex offenses may also make summarizing the data more difficult due to a lack of reporting or a fear of coming forward on the part of potential victims, thus making it so those incidents may not show up with crime reports even though they took place.
 
 ### Task 4: Calculating Averages
 
 Calculate the total number of incidents per month for each category using `mutate()`, calling the new column `total_incidents`. Then calculate the average number of incidents per month for each category of crime, calling the new column `average_incidents`. Assign the result to a new dataframe called `pg_crime_averages`.
 
 ```{r}
-
+pg_crime_averages <- pg_crime %>%
+  mutate(
+    total_incidents = rowSums(across(2:13), na.rm = TRUE), 
+    average_incidents = total_incidents / 12                   )
 ```
 
 ### Task 5: Describe the Averages
 
 Examine the new dataframe, `pg_crime_averages`, by clicking on it in the Environment tab in RStudio. Write a couple of sentences describing the average number of incidents per month for each category. Which categories have the highest average number of incidents per month? Which have the lowest? What does this tell you about the pattern of crime in Prince George's County? Are there categories that you have questions about? Why or why not?
 
-ANSWER HERE
-
+Crimes involving the categories of car accidents, car accidents with impoud, stolen automobiles, and theft from a car are the categories with the highest average numbers of incidents per month in terms of crimes in Prince George's County. This is while other incidents of breaking and entering, homicide, sex offenses, and assult with a weapon are the categories with the lowest average numbers of incidents per month in terms of crimes in Prince George's County. My main question has to do with car accidents and car accidents with impoud. In terms of Prince Goerge's County crime patterns I believe that this indicates that although car accidents and auto theft may be a bit higher, more violent crime such as homocide and assault with a weapon seem to be less common. I'm wondering why both categories seem more likely to happen within the summer months of June to August than winter months of January to March, which is happening desipte the fact that June to August should contain less hazardous and thus accident-causing conditions than January to March.
 
 ### Task 6: Testing a Theory
 
 One theory about crime is that it is more likely to occur in the summer months. Test this theory by creating three new columns using `mutate()` that calculate the percentage change compared to the average for each category of crime for the months of June, July, and August. Call the new columns `june_change`, `july_change`, and `august_change`. Assign the result to a new dataframe called `summer_crime_averages`.
 
 ```{r}
+summer_crime_averages <- pg_crime %>%
+  mutate(
+    total_incidents = rowSums(across(2:13), na.rm = TRUE), 
+    average_incidents = total_incidents / 12,
+    june_change = (.[[7]] - average_incidents) / average_incidents * 100, 
+    july_change = (.[[8]] - average_incidents) / average_incidents * 100,  
+    august_change = (.[[9]] - average_incidents) / average_incidents * 100  
+  ) 
 ```
 
 ### Task 7: Describe the Summer Crime Averages
 
 Look at the `summer_crime_averages` dataframe by clicking on it in the Environment tab in RStudio. Write a couple of sentences describing the percentage change in the average number of incidents per month for each category of crime for the months of June, July, and August. Do you see any patterns? What does this tell you about the theory that crime is more likely to occur in the summer months?
 
-ANSWER HERE
+Although categories such as homicide, stolen auto, and assaults involving a shooting seem to generally be higher in the summer months, categories of crime that occur at the highest frequencies, such as accidents and accidents with impound seem to happen at around the same rate or even less in the summer, while breaking and entering other seems to be universally lower. I think all of this indicates that the theory that crime is more likely to occur in the summer months may be true when looking at certain categories of crimes, but is not universally the case.
 
 ### Task 8: What's the Story?
 
 Write up a lede and nutgraf of a story focused on the crime data in Prince George's County. It could be from any of the dataframes you've created in this assignment. The lede should be a single sentence that summarizes the most important information in the data. The nutgraf should be a paragraph that provides more context and explains why the data is important.
 
-ANSWER HERE
+LEDE: Auto-related crime are three words that can be used to describe the top four most reported categories of crime within Prince George's County.
+
+NUTGRAF: Accidents, stolen auto, theft from auto, and accidents with impound are the top four most reported categories in order of crime reported within the Prince George's County Police Department's (PGPD) crime database over the course of a year. And while PGPD reports auto-related crime happening at the highest rates when compared to other crimes, more violent crime such as sex offenses and homicide are reported as happening at much lower rates comparatively. Although both the rates of homicide and auto theft have a tendency to increase during the summer months in comparison to the rest of the year.This data is not only be helpful for law enforcement to figure out more of the overall scope of crime within the county, but for county residents who wish to know what is the status of specific categories of crime within the area.
 
 ### Task 9: Save Your Work and Put it on GitHub
 
