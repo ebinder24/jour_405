@@ -9,6 +9,10 @@ In this assignment, we will be working with a dataset containing information abo
 You will need to load the tidyverse library
 
 ```{r}
+
+library(tidyverse)
+install.packages("dplyr")
+library(dplyr)
 ```
 
 Then you'll load the data from the web. The URL for the data is: https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/biden_wh_salaries_2024.csv. You will create a dataframe called `wh_salaries` that contains the data from this URL.
@@ -16,19 +20,22 @@ Then you'll load the data from the web. The URL for the data is: https://raw.git
 ### Task 2: Load the Data and Describe It
 
 ```{r}
+wh_salaries <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/biden_wh_salaries_2024.csv") |> clean_names()
 ```
 ### Task 3: Describe the Data
 
 You should examine that dataframe carefully by clicking on it in the Environment tab in RStudio. Write a couple of sentences describing the categories of incidents. From a reporting standpoint, what stands out to you about this data? Are there any salary values that will cause problems for analysis?
 
-ANSWER HERE
-
+In terms of salaries, the vast majority of salary values are over 70,000 dollars annually, most also seem to be within the 100,000-150,000 dollar range, with those salaries over 150,000 dollars usually outliers. In terms of a reporting standpoint, the lowest salary, besides for 0 which I will address, is 20000 dollars, the salary of associate counsel to the White House, Jonathan Shaub. The highest salary, and seemingly the only one making over 200000 dollars another associate counselor, Michelle Barrans at 251258 dollars. I believe that the salary values of many of the policy advisors and senior directors who make 0 dollars may cause problems for the analysis.
 ### Task 4: Calculate the Mean and Median of the Salaries
 
 Write code to calculate the mean and median of the salaries in the dataset using the `summarize()` function. You don't need to make a new dataframe, just display the results.
 
 ```{r}
-
+mean_salary=mean(wh_salaries$salary) 
+median_salary=median(wh_salaries$salary)
+print(mean_salary)
+print(median_salary)
 ```
 
 ### Task 5: Add in the minimum and maximum salaries
@@ -36,17 +43,24 @@ Write code to calculate the mean and median of the salaries in the dataset using
 Take the code you just wrote and add in the minimum and maximum salaries (the functions for that are `min()` and `max()`). Your results should show four columns: mean_salary, median_salary, min_salary, max_salary.
 
 ```{r}
-
+mean_salary=mean(wh_salaries$salary) 
+median_salary=median(wh_salaries$salary)
+min_salary=min(wh_salaries$salary)
+max_salary=max(wh_salaries$salary)
+print(mean_salary)
+print(median_salary)
+print(min_salary)
+print(max_salary)
 ```
 
 ### Task 6: Describe the Results
 
 Write a couple of sentences describing the results of your analysis. What do the mean and median salaries tell you about the data? What do the minimum and maximum salaries tell you? Are there any outliers in the data?
 
-ANSWER HERE
+The mean and the median salaries tell me that most white house employees are likely earning a salary of around 107000 dollars to 110500 dollars. This matches with my earlier assumptions that most employees are earning something within the range of 100000 to 150000 dollars. The minimum and maximum salaries tell us that although many employees seem to be closer to the mean and median, there are some notable outliers, such as the numerous salaries of 0 dollars and that of over 250000 dollars.
 
 ### Task 7: Story Idea
 
 Based on the data, what is your best story idea? What is the next step you would take to develop that story idea?
 
-ANSWER HERE
+Based on the data my best story idea is to chronicle those who make 0 dollars in positions such as policy advisors and senior directors. I would want to do a piece centered around what their motivations were to essentially volunteer their services for the WHite House, starting with what was driving their seemingly ideological passion to do so. My next step I'd take to develop this story idea would be to attempt to gain contact information for those who were making 0 dollars and then reach out from there.
