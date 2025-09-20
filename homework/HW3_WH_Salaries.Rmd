@@ -32,10 +32,12 @@ In terms of salaries, the vast majority of salary values are over 70,000 dollars
 Write code to calculate the mean and median of the salaries in the dataset using the `summarize()` function. You don't need to make a new dataframe, just display the results.
 
 ```{r}
-mean_salary=mean(wh_salaries$salary) 
-median_salary=median(wh_salaries$salary)
-print(mean_salary)
-print(median_salary)
+library(dplyr)
+summarise(wh_salaries,
+
+ median_value = median(salary, na.rm = TRUE),
+
+ mean_value = mean(salary, na.rm = TRUE))
 ```
 
 ### Task 5: Add in the minimum and maximum salaries
@@ -43,14 +45,16 @@ print(median_salary)
 Take the code you just wrote and add in the minimum and maximum salaries (the functions for that are `min()` and `max()`). Your results should show four columns: mean_salary, median_salary, min_salary, max_salary.
 
 ```{r}
-mean_salary=mean(wh_salaries$salary) 
-median_salary=median(wh_salaries$salary)
-min_salary=min(wh_salaries$salary)
-max_salary=max(wh_salaries$salary)
-print(mean_salary)
-print(median_salary)
-print(min_salary)
-print(max_salary)
+summarise(wh_salaries,
+
+ median_value = median(salary, na.rm = TRUE),
+
+ mean_value = mean(salary, na.rm = TRUE),
+ 
+ min_salary = min(salary),
+ 
+ max_salary = max(salary)
+ )
 ```
 
 ### Task 6: Describe the Results
