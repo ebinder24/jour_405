@@ -67,3 +67,31 @@ NUTGRAF: According to the Maryland State database tracking property and violent 
 ### Task 9: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
+
+### Task 10
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+md_cities_percentiles <- md_cities_rates |> 
+  group_by(city) |> 
+  summarize(violent_rate_2020= sum(violent_rate_2020)) |> 
+  arrange(desc(violent_rate_2020))
+```
+
+
+```{r}
+ md_cities_percentiles %>% mutate(percentile = ntile(violent_rate_2020, 100))
+ md_cities_percentiles
+print(class(md_cities_percentiles))
+md_cities_percentiles <- as.data.frame(md_cities_percentiles)
+```
+There are 10 cities that are above the 90th percentile when it comes to their violent crime rates in 2020.
+```{r}
+md_cities_percentiles %>%
+  summarize(iqr_value = IQR(violent_rate_2020, na.rm = TRUE))
+```
+I do not believe these results change my previous best story idea. These results still show that cities within the Eastern Shore have particularly high violent crime rates, with 5 out of the 10 cities that are over the 90th percentile when it comes to violent crime rates in 2020 being located on the Eastern Shore. Given that my story is centered around crime rates being higher on the Eastern Shore when compared to the rest of the state within 2019-2020, I believe this data serves to offer some reinforcement to this claim.
