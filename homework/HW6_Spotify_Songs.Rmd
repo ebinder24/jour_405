@@ -7,11 +7,13 @@ In this assignment, you will be working with a dataset of songs played on Spotif
 ### Task 1: Load the tidyverse
 
 ```{r}
+library(tidyverse)
 ```
 
 ### Task 2: Load the Spotify Songs dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/spotify_2020.csv
 
 ```{r}
+spotify_songs <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/spotify_2020.csv")
 ```
 
 ### Task 3: Calculate the mean and standard deviation of the danceability scores
@@ -19,6 +21,10 @@ In this assignment, you will be working with a dataset of songs played on Spotif
 Write code to calculate the mean and standard deviation of the danceability scores in the Spotify dataset. Display those.
 
 ```{r}
+summarise(spotify_songs,
+
+ mean_value = mean(danceability, na.rm = TRUE),
+ sd_value= sd(danceability, na.rm = TRUE))
 ```
 
 ### Task 4: Create a histogram of the danceability scores
@@ -26,6 +32,9 @@ Write code to calculate the mean and standard deviation of the danceability scor
 Write code to create a histogram of the danceability scores in the Spotify dataset, based on the example we did in class.
 
 ```{r}
+spotify_songs |> 
+  ggplot() + 
+  geom_histogram(aes(x = danceability), binwidth = 0.3)
 ```
 
 ### Task 5: Add a line to the histogram for the mean danceability score
@@ -33,6 +42,10 @@ Write code to create a histogram of the danceability scores in the Spotify datas
 Take the same code and add a vertical line to the histogram for the mean danceability score, based on the example in class.
 
 ```{r}
+spotify_songs |> 
+  ggplot() + 
+  geom_histogram(aes(x = danceability), binwidth = 0.3)+
+geom_vline(aes(xintercept = mean(danceability)), color = "red", size = "dashed", linewidth = 1)
 ```
 
 
@@ -41,13 +54,27 @@ Take the same code and add a vertical line to the histogram for the mean danceab
 Take the previous code and add two lines to the histogram for the 1st standard deviation below and above the mean score.
 
 ```{r}
+spotify_songs |> 
+  ggplot() + 
+  geom_histogram(aes(x = danceability), binwidth = 0.3)+
+  geom_vline(aes(xintercept = mean(danceability)), color = "red", size = "dashed", linewidth = 1)+
+  geom_vline(aes(xintercept = mean(danceability) - sd(danceability)), color = "blue", linetype = "dashed", size = 1) +
+  geom_vline(aes(xintercept = mean(danceability) + sd(danceability)), color = "blue", linetype = "dashed", size = 1)
 ```
 
 ### Task 7: Describe our results and pitch a story
 
 Write a few sentences about the distribution of danceability scores in the Spotify dataset. Is it a normal distribution, or is it skewed in one direction? What does the mean and one standard distribution tell us about the songs in the dataset? Draft a short story pitch from this data.
 
+The dataset of the distribution of danceability scores within the spotify_songs dataset is not a normal distribution, it is skewed to the left. The mean tells us that the central measure of danceability of the over 1700 songs within the dataset is 0.6730774/1.00. When looking at one standard distribution above and below this mean, we can see that just about 68 percent of this dataset is within 0.1615482	of the mean value.
 
+Story Pitch: Danceability Reigns Supreme within Spotify Song Rankings
+
+Reporter: Eden Binder, JOUR405
+
+What the News is: Within the 2020 Spotify song rankings, when it comes to standing out amongst over 1700 songs, you're much more likely to do so if you're song has an above average 'danceability' ranking. Out of the top 25 Spotify songs of 2020, 16 of them had a danceability score that was above the mean.
+
+So what: A key component of understanding why certain songs excel on Spotify could come down to if those songs are easier to dance to. More work for this pitch could be done by digging into the other songs in this dataset by analyzing other songs by the artists with top 25 songs that were released on Spotify within 2020 to see if their songs with higher danceability scores or those songs with danceability scores above the mean versus those below the mean continually rated better than the ones with lower danceability scores.
 
 ### Task 8: Save Your Work and Put it on GitHub
 
