@@ -1,0 +1,181 @@
+---
+title: "HW9_TestScores"
+Name: Derek Willis/Rob Wells
+Date: 10/21/2025
+---
+
+name: Eden Binder
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Did a New Reading Program Lead to Better Scores?
+
+The superintendent recently claimed that a new reading program has improved third-grade reading scores across the school district.
+
+Before the program, third-grade students in the district averaged 72.6 points on standardized reading tests with a standard deviation of 4.8 points.
+
+After implementing the program for one semester, you collected scores from 12 randomly selected classrooms:
+74, 76, 73, 75, 78, 77, 74, 79, 75, 76, 77, 75
+
+As a journalist, you need to determine: **Is there statistical evidence that reading scores have actually improved?**
+
+## Task 1: Organize your data and initial assessment
+
+Before you can run this codeblock, you will need to fill in a value where it says REPLACE_ME. That value can be found in the introduction.
+
+```{r}
+# Known information about reading scores before the new program
+prior_mean <- 72.6  # average score
+prior_sd <- 4.8     # standard deviation
+
+# Reading scores after implementing the new program (12 classrooms)
+new_scores <- c(74, 76, 73, 75, 78, 77, 74, 79, 75, 76, 77, 75) # Replace with the actual scores
+
+# Create a journalist-friendly dataset
+score_data <- tibble(
+  classroom = paste("Classroom", 1:12),
+  reading_score = new_scores
+)
+
+# View the data
+score_data
+```
+
+### Reflection Question 1:  (2 points)
+Based on just looking at the score_data dataframe, have test scores improved? How can you tell?
+Yes just by looking at the score_data dataframe you can tell that test scores have improved as every one of the 12 classrooms average scores post one semester for the program are above the prior mean of 72.6. However without running the other calculations we are yet to see if this is statistically signifigant yet.
+
+## Task 2: Calculate key statistics  (2 points)
+
+Like Task 1, you will need to replace values where it says REPLACE_ME before running any code.
+
+
+```{r}
+# Calculate statistics based on the new reading scores
+new_stats <- score_data |> 
+  summarise(
+    mean = mean(reading_score),
+    sd = sd(reading_score),
+    n = n(),
+    min = min(reading_score),
+    max = max(reading_score)
+  )
+
+new_stats
+```
+
+### Reflection Question 2: (3 points)
+Looking at the mean and standard deviation of the new scores compared to the previous statistics, what initial observations can you make? Provide examples from the data in your answer. What questions might these statistics raise for your reporting?
+Initial observations are that the average score after the program is over three points higher than before the program. The standard deviation is also over three points lower than before the program. Some questions from these statistics for my reporting could be if the new program has made students' test scores more consistent in a statistically signifigant way like the standard deviation shrinking seems to indicate, as well as a question over whether this data signifying the program improving test scores could hold up beyond just 12 classrooms.
+
+
+## Task 3: Create a column chart  (1 points)
+
+As before, replace any values marked REPLACE_ME based the instructions.
+
+
+```{r}
+# STUDENT TASK: Choose an appropriate fill color for the bars
+my_fill_color <- "REPLACE_ME" # Replace with a color name like "royalblue", "darkgreen", etc.
+
+# Create a visualization comparing new scores to the previous average
+score_data |> 
+ggplot(aes(x = classroom, y = reading_score)) +
+  geom_col(fill = "royalblue", alpha = 0.8) +
+  geom_hline(yintercept = prior_mean, color = "darkred", size = 1, linetype = "dashed") +
+  annotate("text", x = 2, y = prior_mean - 1, 
+           label = "Previous Average (72.6)",  hjust = -0.5, vjust= 2, fontface = "bold", color = "darkred") +
+  labs(
+    title = "Reading Scores After New Program Implementation",
+    subtitle = "Horizontal line shows previous district average of 72.6 points",
+    x = NULL,
+    y = "Reading Test Score",
+    caption = "Source: District Assessment Data"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+### Reflection Question 3: (3 points)
+Examine the chart you created, and suggest a better title based on the results of the data, not a description.
+A better title for the chart based on the results of the data may be: "The Increase of Reading Scores post a new program implementation"
+## Task 4: Perform a hypothesis test (2 points)
+
+This is where we formally test the superintendent's claim that reading scores have improved. Fill in the REPLACE_ME values as needed, beginning with your hypotheses.
+
+**Hypotheses:**
+Null: The new reading program μ ≤ 72.6
+Alternative: The new reading program μ > 72.6
+
+```{r}
+# Set the significance level for your test
+alpha_level <- 0.05
+
+# Perform a one-sample t-test
+# Since we want to know if scores improved (increased), we use a one-sided test (alternative = "greater")
+t_test_result <- t.test(
+  score_data$reading_score,
+  mu = prior_mean,
+  alternative = "greater"
+)
+
+# Display the results
+t_test_result
+```
+
+### Reflection Question 4:  (3 points)
+What does the p-value tell you, and what doesn't it tell you? How would you explain these results to a non-technical audience while maintaining accuracy?
+
+The p-value measures the strength of evidence when it comes to the validity of the null hypothesis. It can tell you whether the results provide enough statistically significant evidence to reject the null hypothesis for an alternative, or accept the null hypothesis. The p-value cannot tell you whether the null hypothesis is true or false, just if there is statistically signifigant evidence that points to rejecting or accepting it. When it comes to the results above, I would tell a non-technical audience that the evidence of the 12 classrooms' scores post the new program's implementation is statistically significant enough the reject the null hypothesis that the results are below or equal to 72.6 and embrace an alternative that the results have been increased beyond that value after the new reading program's implementation.
+
+
+## Task 5: Interpreting the results for your news story (2 points)
+
+Let's gather all of the important stats we'll need in one place, so we can look at the prior average, the new scores and the results of the t.test, including the confidence interval. Replace any values where it says REPLACE_ME.
+
+
+```{r}
+# Get the p-value
+p_value <- t_test_result$p.value
+
+# Calculate the 95% confidence interval
+ci <- t.test(score_data$reading_score)$conf.int
+
+# Create a tibble to display the key statistics for your story
+story_stats <- tibble(
+  `Previous average` = prior_mean,
+  `New average` = mean(new_scores),
+  `Improvement` = mean(new_scores) - prior_mean,
+  `Percent change` = round(((mean(new_scores) - prior_mean) / prior_mean) * 100, 1),
+  `p-value` = p_value,
+  `Lower bound` = ci[1],
+  `Upper bound` = ci[2],
+  `Confidence level` = "95%"
+)
+
+# Display the key statistics
+story_stats
+```
+
+## Conclusion
+
+### Reflection Question 5: (4 points)
+Based on these statistics, what would be your headline and lead paragraph for this story? Is there evidence to support the superintendent's claim?
+
+Headline: New Program Implementation Leads to Boosted Scores
+Lede Paragraph: The beginning of a new program within the district has led to a boost in scores across various classrooms. When looking at the scores from 12 classrooms prior to the implementation of the new program versus after, each individual classroom's average score is above the prior average for all classrooms. All classrooms' averages are not only better than their prior average, but the new average is now over four percent and three points higher than the previous averages.
+
+Based on the data we have from 12 classrooms I would say there is enough evidence to validate the superintendent's claim that new reading program has improved third-grade reading scores across the school district. Scores have not only gone up through this sizeable sample, but they have gone up by 3 points, effectively an entire letter grade on average, which to me is a sizeable enough difference that reading scores are imporving overall.
+
+### Reflection Question 6:  (1 point)
+What metrics or outcomes beyond test scores might be important to track for assessing reading performance?
+
+Some metrics or outcomes beyond test scores to track in order to properly assess reading performence may be how many books on average kids within each classroom are reading either within the classroom or on their own time at home. There could also be surveys given to individual students or even their parents to assess whether the students or their parents feel that theirs or the student's reading skills have increased throughout the year beyond just what's shown through the tests.
