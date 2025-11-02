@@ -1,7 +1,11 @@
 ---
 title: "Car Thefts Significance"
-name: REPLACE WITH YOUR NAME
+author: "Derek Willis/Rob Wells"
+date: 10-27-2025
 ---
+
+name: Eden Binder
+
 
 Your editor wants to know if there have been recent changes in the number of car thefts in Prince George's County. Using monthly figures and significance testing, you'll come up with an answer and decide whether there's a story here. As with the previous homework, provide answers in this notebook when prompted and you will have to fill in values where you see REPLACE_ME. Get started by loading the tidyverse in a new R block.
 
@@ -28,9 +32,7 @@ glimpse(car_thefts)
 
 ### Task 3: Let's make a chart and describe the results.
 
-We'll make a line chart using geom_line() to try and illustrate any trend over time. What's your initial reaction to the change in car thefts? Is there a trend?
-
-PUT ANSWERS HERE
+We'll make a line chart using geom_line() to try and illustrate any trend over time. 
 
 ```{r}
 
@@ -49,19 +51,24 @@ ggplot(aes(x = month, y = total)) +
     plot.title = element_text(face = "bold", size = 14),
     axis.title = element_text(face = "bold")
   )
-
 ```
+
+
+**Q3:** What's your initial reaction to the change in car thefts? Is there a trend?
+
+**WRITE ANSWERS HERE:**
+My initial reaction to the change in car thefts is that there is definitely a clear trend that is being displayed. It seems that according to the chart the amount of car thefts per month from July 2023 to February 2025 seems to have consistently decreased except for the summer months of 2024, after which the car thefts went back down to their lowest levels during February 2025. This seems to indicate that their are elevated levels of car thefts within the summer months compared to others.
 
 ### Task 4: Add the mean, standard error and calculate a margin of error based on a 95% confidence interval
 
-Let's add some stats to that process - mean and standard deviation - and calculate the standard error and 95% confidence intervals. We only have a small number of months, so we'll calculate the margin of error to account for that. 
+**INSERT CORRECT VARIABLE AT "REPLACE ME"**
 
 ```{r}
 
 theft_summary <- car_thefts |> 
   summarize(
     mean_thefts = mean(total),
-    sd_thefts = sd(REPLACE_ME),
+    sd_thefts = sd(total),
     months = n(),
     se_thefts = sd_thefts / sqrt(months),
     margin_error = qt(0.975, df = months - 1) * se_thefts,  # Using t-distribution for small sample
@@ -101,24 +108,28 @@ ggplot(aes(x = month, y = total)) +
     y = "Number of Car Thefts"
   ) +
   theme_minimal()
-
 ```
 
 ### Task 6: Describe the confidence interval.
 
-- What does the 95% confidence interval show here?
-- What figure(s) accurately reflects the number of car thefts in a typical month?
-- Propose a headline about the trend in car thefts that is focused on the present and future, but informed by the data you see above.
+- What does the 95% confidence interval show here? **WRITE ANSWER HERE:**
+The 95% confidence interval shows that there is a 95% confidence rate that the mean amount of car thefts across the 20 months are between 415.1382	and 505.6618 car thefts per month.
 
-PUT YOUR ANSWERS HERE.
+- What figure(s) accurately reflects the number of car thefts in a typical month? **WRITE ANSWER HERE:**
+The mean as well as the lower and upper confidence intervals accurately reflect the number of car thefts in a typical month.
+
+- Propose a headline about the trend in car thefts that is focused on the present and future, but informed by the data you see above. **WRITE ANSWER HERE:**
+Car thefts rise in summer months, fall in winter months
 
 
 ### Task 7: Is the recent trend significant?
 
-It _looks_ like car thefts are decreasing lately. But is that change real? We'll split the monthly data into two halves, and then ask if whether there's a statistically significant difference between these periods. To do that, we'll use a t-test with our alpha at 0.05 and develop a null hypothesis and an alternative hypothesis for this scenario.
+It looks like car thefts are decreasing lately. But is that change real? We'll split the monthly data into two halves, and then ask if whether there's a statistically significant difference between these periods. To do that, we'll use a t-test with our alpha at 0.05 and develop a null hypothesis and an alternative hypothesis for this scenario.
 
 Null Hypothesis: there is no real difference between the two periods
 Alternative Hypothesis: there is a real difference between the two periods
+
+**INSERT CORRECT VARIABLES AT "REPLACE ME"**
 
 ```{r}
 
@@ -138,11 +149,11 @@ t_test_periods
 period_summary <- car_thefts |> 
   group_by(period) |> 
   summarize(
-    mean_thefts = mean(REPLACE_ME),
+    mean_thefts = mean(total),
     sd_thefts = sd(total),
     months = n(),
     se_thefts = sd_thefts / sqrt(months),
-    margin_error = qt(0.975, df = REPLACE_ME - 1) * se_thefts, # look at how we calculated this above
+    margin_error = qt(0.975, df = months - 1), se_thefts = sd_thefts / sqrt(months),
     ci_lower = mean_thefts - margin_error,
     ci_upper = mean_thefts + margin_error
   )
@@ -166,12 +177,10 @@ ggplot(aes(x = period, y = mean_thefts, fill = period)) +
 
 ### Task 8: Reflection
 
-Given the above chart, is the difference between the two periods statistically significant? Can we reject the null hypothesis?
-
-How would you revise your headline from Task 6, if at all? What would you tell your editor, and what would you expect her to ask you?
-
-PUT ANSWERS HERE
-
+Given the above chart, is the difference between the two periods statistically significant? Can we reject the null hypothesis? **WRITE ANSWER HERE:**
+Based on the chart above the difference between the two periods is statistically signifigant. The t-test tells us tha we can reject the null hypothesis that there is no difference between the two periods and accept the alternative hypotheiss that there is a difference not equal to zero between the two.
+How would you revise your headline from Task 6, if at all? What would you tell your editor, and what would you expect her to ask you? **WRITE ANSWER HERE:**
+I would keep my headline from task  as the data still seems to support the idea that the average amount of car thefts are increasing in the summer months and decreasing in the winter months. I would relay this information to my editor, and I would expect them to ask for the data, much of which is above I have that supports this conclusion so they could examine it themselves and see if they are confident enough in that conclusion to lead with it in the headline for this story.
 
 
 When you are finished, add, commit and push your notebook and submit the URL in ELMS.
