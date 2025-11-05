@@ -1,6 +1,6 @@
 ---
 title: "ANOVA for Journalists: Analyzing College Admissions Test Scores"
-date: 8-22-2025
+date: 11-3-2025
 ---
 
 ```{r setup, include=FALSE}
@@ -60,11 +60,15 @@ admission_summary <- admissions_data |>
 print(admission_summary)
 ```
 
+Context: Fall 2024 midpoint SAT for University of Maryland was 1,465.
+
+
 **Task 3** Describe the data
 
 Write a couple of sentences describing the differences in SAT scores between types of colleges, using the descriptive statistics we just generated.
 
-
+**Task 3: Write your answer here:**
+When it comes to looking at SAT scores from public, private, and community colleges private schools have an edge over all the rest with a mean score of just over 1435 and a median score of around 1427. This is while public schools have a mean score of over 1360 and a median score of around 1357, and community colleges have a mean score of just over 1068 and a median score of around 1055. When looking at standard deviation private schools also have the smallest with a standard deviation of over 86, while public schools have a standrd deviation of just over 109 and community colleges have a standard deviation of over 142. This means that at private schools there is more consistency from student to student when it comes to SAT scores than either public or community schools.
 
 ## Task 4: Visualize the Data
 
@@ -108,6 +112,29 @@ summary(anova_result)
 
 The F-value is huge (284.3). The F-value measures the ratio of between-group variance to within-group variance, and this high value suggests the differences between college types far outweigh the variation within each type. The p-value is very low, indicating the differences between college types are statistically significant at any reasonable significance level. The three asterisks (***) highlight that this is significant at the 0.001 level. So we can say that with confidence that there are real differences in SAT scores between the three types of colleges.
 
+How do we know the F-value is huge?
+We can calculate the critical value for an F statistic by using the qf() function in R
+
+```{r}
+# Your ANOVA has:
+# df1 (between groups) = 2
+# df2 (within groups/residuals) = 297
+# Common alpha levels: 0.05, 0.01, 0.001
+
+# Critical values at different significance levels:
+critical_f_05 <- qf(0.95, df1 = 2, df2 = 297)
+critical_f_01 <- qf(0.99, df1 = 2, df2 = 297)
+critical_f_001 <- qf(0.999, df1 = 2, df2 = 297)
+
+cat("Here are the Critical F-values:\n")
+cat("alpha of α = 0.05: ", round(critical_f_05, 3), "\n")
+cat("alpha of α = 0.01: ", round(critical_f_01, 3), "\n")
+cat("alpha ofα = 0.001:", round(critical_f_001, 3), "\n")
+cat("The F-statistic is: 284.3\n")
+cat("Ratio to most extreme critical value (α=0.001) to the F statistic:", round(284.3/critical_f_001, 1), "x\n")
+```
+
+
 ## Task 5: Compare the differences between specific pairs
 
 ```{r post-hoc}
@@ -134,3 +161,8 @@ Based on our analysis, we can now answer:
 
 Answer those questions, providing evidence for your answers, and then write a headline and a lead paragraph reporting these findings using active voice and focusing on the differences across types.
 
+Based on the means, medians, and standrd deviations, as well as the ANOVA test which shows that this datapoint is signifigant at any confidence level, presented across the charts and datasets there is a signifigant difference in SAT scores across the different college types when it comes to SAT scores. When it comes to the colleges that differ from each other the most it is private-community  as well as public-community colleges which differ from each other the most according to tukey's HSD test and p-levels, public-private soars above both of the other comparions. The difference between private-community is 366.95577, while public-community is 292.55140 and public private is only -74.40438.The p-value for public-private is a much more signifigant number when adjusted. According to the high F-value of 284.3, these differences between college groups outweigh the variation of SAT scores within each type of school.
+
+Headline: SAT scores higher at private and public schools, lagging behind at community schools
+
+Lede: It may be unsuprising, but when it comes to the average SAT scores at universities, private schools have a clear advantage over both public and community schools. Public schools have a mean SAT score of 1435, while public schools have a mean score of 1360 and community schools have a mean score of only 1068. And when it comes to the varience or standrd deviation of these scores, private schools also have less varience and more consistentcy with the smallest standrd deviation of the bunch with public schools then community schools following private in that order once again.
