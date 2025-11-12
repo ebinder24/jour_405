@@ -114,7 +114,7 @@ ggplot(nonvoters_data, aes(x = weight)) +
 1. What is the range of weights in this dataset? **Write your answer here:**
 The range of weights in this dataset is 0.2298 to 3.0386 or a total range of 2.8088.
 2. What does it mean when a respondent has a weight of 0.23? What about 3.04? **Write your answer here:**
-If a respondent has a weight of 0.23 they have been overrepresented in this dataset, which means that their vote within the data is less than one, in this case the respondent equals 0.23 of a person's vote instead of one. If a respondent has a weight of 3.04 they have been underepresented in this dataset, which means that their vote within the data is more than one, in this case the respondent equals 3 people's vote instead of one.
+If a respondent has a weight of 0.23 they have been overrepresented in this dataset, which means that their vote within the data is less than one, in this case the respondent equals 0.23 of a person's vote instead of one. If a respondent has a weight of 3.04 they have been underrepresented in this dataset, which means that their vote within the data is more than one, in this case the respondent equals 3 people's vote instead of one.
 3. Why might some respondents be weighted more heavily than others? **Write your answer here:**
 Some respondents may be weighed higher than other due to them have demographic traits that are less common when it comes to the rest of the dataset. For example if the survey has less men or people with only a high school education represented, the data of a man with only a high school degree will be weighted more heavily when compared to other people who have a higher rate of representation.
 # Exercise 1: Voter Categories and Weighting
@@ -250,7 +250,8 @@ comparison
 **Answer These Questions:**
 
 1. Which voter category shows the biggest difference between weighted and unweighted results? **Write your answer here:**
-
+The rarely/never category showed the biggest difference between weighted and unweighted results.
 2. How might these differences affect reporting on likely voter turnout? **Write your answer here:**
-
+When you add weighting to the results they become more accurate as the results become more based on statistical analysis versus conflicting responses that was collected when people who say they rarely vote say they will vote before the election. This will make the reporting more accurate.
 3. Why do you think these differences exist? What does this tell us about who might be over or under-represented in the sample? **Write your answer here:**
+These differences mainly exist because within groups of people who will historically make a commitment to vote versus those why may only vote in big elections or not at all, however many of these people may say they will vote and so those who the data presumes will vote before an election such as sporadic voters may be over-represented while those who never vote could be under-represented.
