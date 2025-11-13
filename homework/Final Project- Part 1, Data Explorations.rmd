@@ -20,14 +20,15 @@ tuition_data <- read.csv("https://raw.githubusercontent.com/wellsdata/Jour405_st
 
 1. What does it contain and what time period does it cover?
 
-The data set contains data regarding in-state and out of state tuition and its trends for undergraduate students in all the institutions of higher education the states of Maryland and Virginia within the years of 2021-22, 2022-23, and 2023-24. These institutions of higher education that are theological and cosmetic in nature across the two forementioned states. To complement this, there is also data present on undergraduate enrollment across all three years covered for the institutions.
+The data set contains data regarding in-state and out of state tuition and its trends for undergraduate students in 255 institutions of higher education the states of Maryland and Virginia within the years of 2021-22, 2022-23, and 2023-24. These institutions of higher education are not only 4-year universities, but also institutions that are theological and cosmetic in nature across the two aforementioned states. To complement this, there is also data present on undergraduate enrollment across all three years covered for the institutions.
 
 2. Which columns will be most important for your analysis?
 
 For my analysis, the colums that detail the tuition for each colleges, specifically the in-state and out of state from each of the three years examined will be most important for my upcoming analysis when it comes to finding specific trends within tuition for not only higher institutions within both Maryland and Virginia, but also potentially the differences between public and private institutions.
 
 3. What's missing that you might need or want?
-Something I may want that is missing is enrollment data that gives the enrollment data of students who are in-state versus out-of-state. When it comes to analyzing the trends we see within both public institutions in Maryland and Virginia, I think that this data could be valuable in pointing to why certain institutions may have more in-state or out-of-state students, or just higher enrollment in general.I also think that enrollment broken down by class level for all three years is something that's missing and could also be useful to understand the broader enrollment trends within each institution.
+
+Something I may want that is missing is enrollment data that gives the enrollment data of students who are in-state versus out-of-state. When it comes to analyzing the trends we see within both public institutions in Maryland and Virginia, I think that this data could be valuable in pointing to why certain institutions may have more in-state or out-of-state students, or just higher enrollment in general. I also think that enrollment broken down by class level for all three years is something that's missing and could also be useful to understand the broader enrollment trends within each institution.
 
 4. Select a relevant column and produce basic descriptive statistics on the mean, median, lowest and highest values.
 ```{r}
@@ -35,5 +36,33 @@ tuition_data |> summarise(mean = mean(X2022_23_tuitionfee_in, na.rm=TRUE), media
 
 ```
 
+Hypotheses that i think could be newsworthy:
+Null: Institutions of higher education in Virginia do not have higher out of state tuition than those of Maryland 
+Alternative: Institutions of higher education in Virginia do have higher out of state tuition than those of Maryland
 
+Null: Institutions of higher education in Maryland do not have higher out-of-state tuition than those of Virginia 
+Alternative: Institutions of higher education in Maryland do have higher out of state tuition than those of Virginia
 
+Null: The mean tuition for in-state students in both Maryland and Virginia has not increased from 2021-2022 to 2023-2024
+Alternative: The mean tuition for in-state students in both Maryland and Virginia has increased from 2021-2022 to 2023-2024
+
+Null: The mean tuition for out-of-state students in both Maryland and Virginia has not increased from 2021-2022 to 2023-2024
+Alternative: The mean tuition for out-of-state students in both Maryland and Virginia has increased from 2021-2022 to 2023-2024 
+
+Null: The mean tuition for in-state students students in both Maryland and Virginia has not increased from 2021-2022 to 2023-2024
+Alternative: The mean tuition for in-state students in both Maryland and Virginia has increased from 2021-2022 to 2023-2024
+
+Null: The mean tuition for out-of-state students  students in Maryland has not increased from 2021-2022 to 2023-2024
+Alternative: The mean tuition for out-of-state students in Maryland increased from 2021-2022 to 2023-2024 
+
+Null: The mean tuition for out-of-state students in Virginia has not increased from 2021-2022 to 2023-2024
+Alternative: The mean tuition for out-of-state students in Virginia increased from 2021-2022 to 2023-2024
+
+Null: The mean tuition for in-state students students in Maryland has not increased from 2021-2022 to 2023-2024
+Alternative: The mean tuition for in-state students in Maryland increased from 2021-2022 to 2023-2024 
+
+Null: The mean tuition for in-state students in Virginia has not increased from 2021-2022 to 2023-2024
+Alternative: The mean tuition for in-state students in Virginia increased from 2021-2022 to 2023-2024 
+
+What questions do you have about it or need help answering?
+My question concerns what is possible for me to do when it comes to separating certain pools of data to explore some of my newsworthy hypotheses that I have listed above. For example, is it possible for me to split the data on Maryland versus Virginia within the set into two different categories so I can calculate values separately for institutions within both states.
