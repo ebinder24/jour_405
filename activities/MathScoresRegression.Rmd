@@ -1,7 +1,7 @@
 
 ---
 title: "Activity: Linear Regression "
-date: 8-24-2025
+date: 11-17-2025
 ---
 
 ```{r}
@@ -27,7 +27,7 @@ schools <- read_csv("https://raw.githubusercontent.com/dwillis/jour405_files/ref
 ```
 ### Task: Create a Scatterplot and Describe the Results (2 points)
 
-Next, let's create a scatterplot to visualize the relationship between the FARMS percentage and the percentage of students who met or exceeded math expectations. We'll use ggplot2 to create the plot and add a linear regression line.
+Next, let's create a scatterplot to visualize the relationship between the FARMS  (Free and Reduced-price Meal System) percentage and the percentage of students who met or exceeded math expectations. We'll use ggplot2 to create the plot and add a linear regression line.
 
 ```{r}
 schools |>
@@ -39,8 +39,8 @@ schools |>
 
 The scatterplot shows the overall trend of the relationship between the FARMS percentage and the math test scores. The red line represents the linear regression line, which helps us understand the average relationship between the two variables. Based on what you see here, what's the relationship between FARMS percentage and math test scores?
 
-ANSWER HERE
-
+**WRITE YOUR ANSWER HERE**
+Based on the above plot, it seems that the average relationship between the FARMS percentage and the math test scores is that as the FARMS percentage increases, the percentage of those who met expectations with their math test scores also slightly increases.
 
 ### Task: Linear Regression Model (3 points)
 
@@ -58,8 +58,8 @@ In the middle, you can see the (Intercept) is 59.57897 and the FARMS coefficient
 
 Based on what you've learned so far, is this model worth using? What does it tell us about the nature of the relationship between FARMS percentage and math scores?
 
-ANSWER HERE
-
+**WRITE ANSWER HERE**
+Based on what I've learned so far it seems that this model is not worth using for the plot above, as according to the adjusted r-squared value of 0.0254 and the p-value of 0.1225, the FARMS value does not explain much of the outcomes of the math scores, which can be accepted as a null hypothesis by the insignifigant p-value.
 ### Task: Identifying Schools with Biggest Residuals (2 points)
 
 To find the schools with the biggest differences between their actual and expected math test scores, we'll extract the residuals from the linear regression model. The residuals represent the difference between the actual and predicted values. Residuals can tell you several things, but most important is if a linear model the right model for your data. If the residuals appear to be random, then a linear model is appropriate. If they have a pattern, it means something else is going on in your data and a linear model isn’t appropriate.
@@ -83,10 +83,11 @@ schools <- schools |>
 ```
 The schools with the biggest positive residuals are performing better than expected, while the schools with the biggest negative residuals are performing worse than expected, based on their FARMS percentage. Look at the absolute values of the residuals; what are the largest differences between the predicted result and the actual math scores?
 
-ANSWER HERE
-
+**WRITE YOUR ANSWER HERE**
+The largest differences between the predicted result and the actual math scores are Whitemarsh Elementary School with a residual value of -34.8972916, Gulph Elementary School with a residual value of -31.3432381 and Crooked Billet Elementary School with a residual value of 31.1111824.
 ## Task: Evaluate the model (3 points)
 
 A school board member has said at a meeting that elementary schools with fewer students on free and reduced price meals do better on standardized math tests. Describe what conclusions you'd draw from this model's results and how it would influence a story pitch about the school board member and math scores.
 
-ANSWER HERE
+**WRITE YOUR ANSWER HERE**
+Based on this model's results, I would say that the statement of the school board member is not totally accurate that elementary schools with fewer students on free and reduced price meals do better on standardized math tests. In addition to my interpretation of the data from the scatterplot going against this assumption, when it comes to the bottom five schools in terms of the percentage of those students not meeting or exceeding math expectations four out of five schools had a FARMS percentage that was lower than 25 percent, meanwhile the top 5 schools three out of the five schools had a FARMS percentage that was higher than 25 percent. I think this would influence my story pitch to highlight the more in depth analysis I would provide that would contradict the school board member, using this as the basis of making this into a story that mainly revolves around digging deeper and probably providing significant evidence to disprove the school board member's claim.
