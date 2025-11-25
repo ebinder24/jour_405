@@ -1,0 +1,203 @@
+---
+title: 'Final Project: Part 1, Data Explorations'
+author: "Eden Binder"
+date: "2025-11-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(janitor)
+
+```
+
+
+Datasets:
+```{r}
+tuition_data <- read.csv("https://raw.githubusercontent.com/wellsdata/Jour405_student_repo_fall_2025/refs/heads/main/project/college_scorecard_2021_2024.csv")
+```
+
+```{r}
+md_tuition <- tuition_data |> 
+  filter(state=="MD")
+```
+
+```{r}
+va_tuition <- tuition_data |> 
+  filter(state=="VA")
+```
+
+1. What does it contain and what time period does it cover?
+
+The data set contains data regarding in-state and out of state tuition and its trends for undergraduate students in 255 institutions of higher education the states of Maryland and Virginia within the years of 2021-22, 2022-23, and 2023-24. These institutions of higher education are not only 4-year universities, but also institutions that are theological and cosmetic in nature across the two aforementioned states. To complement this, there is also data present on undergraduate enrollment across all three years covered for the institutions.
+
+2. Which columns will be most important for your analysis?
+
+For my analysis, the columns that detail the tuition for each colleges, specifically the in-state and out of state from each of the three years examined will be most important for my upcoming analysis when it comes to finding specific trends within tuition for not only higher institutions within both Maryland and Virginia, but also potentially the differences between public and private institutions.
+
+Hypotheses that I will be testing:
+
+#1
+Null: The mean tuition for in-state students in both Maryland and Virginia has not increased significantly from 2021-2022 to 2023-2024
+Alternative: The mean tuition for in-state students in both Maryland and Virginia has increased significantly from 2021-2022 to 2023-2024
+
+#2
+Null: There are not more schools in Virginia than Maryland whose tuition rates would be considered statistical outliers when compared to both Maryland and Virginia's mean tuition rates within 2023-2024 
+Alternative: There are more schools in Virginia than Maryland whose tuition rates would be considered statistical outliers when compared to both Maryland and Virginia's mean tuition rates within 2023-2024
+
+#3
+Null: The rate that in-state tuition has changed at when it comes to comparing Maryland to Virginia from 2021-2022 to 2023-2024 is not statistically significant
+Alternative: The rate that in-state tuition has changed at when it comes to comparing Maryland to Virginia from 2021-2022 to 2023-2024 is statistically significant
+
+#1
+```{r}
+md_tuition |> summarise(mean2021_22 = mean(X2021_22_tuitionfee_in, na.rm=TRUE), mean2023_24 = mean(X2023_24_tuitionfee_in, na.rm=TRUE))
+```
+```{r}
+va_tuition |> summarise(mean2021_22 = mean(X2021_22_tuitionfee_in, na.rm=TRUE), mean2023_24 = mean(X2023_24_tuitionfee_in, na.rm=TRUE))
+```
+
+```{r}
+va_tuition |> summarise(sd_2023_24 = sd(X2023_24_tuitionfee_in, na.rm=TRUE))
+```
+
+```{r}
+alpha_level <- 0.05
+
+t.test(
+  md_tuition$X2023_24_tuitionfee_in,
+  md_tuition$X2021_22_tuitionfee_in,
+  paired = TRUE,
+  alternative = "greater"   # tests if 2021–22 < 2023–24
+)
+
+```
+
+```{r}
+alpha_level <- 0.05
+
+t.test(
+  va_tuition$X2023_24_tuitionfee_in,
+  va_tuition$X2021_22_tuitionfee_in,
+  paired = TRUE,
+  alternative = "greater"
+)
+
+```
+This t-test for hypothesis one explores how in-state tuition has changes from 2021-2022 to 2023-2024 with a null hypothesis that the mean tuition for in-state students in both Maryland and Virginia has not increased significantly from 2021-2022 to 2023-2024, and an alternative hypothesis that the mean tuition for in-state students in both Maryland and Virginia has increased significantly from 2021-2022 to 2023-2024. Since the p-value for the t-tests examining the mean tuition changes in both Maryland and Virginia rom 2021-2022 to 2023-2024 are below 0.05, at 2.56e-05 for Maryland and 9.971e-05 for Virginia respectively, there is enough statistical evidence to accept the alternative hypothesis that the mean tuition for in-state students in both Maryland and Virginia has increased significantly from 2021-2022 to 2023-2024.
+
+#2
+
+```{r}
+library(tidyverse)  # For data manipulation and visualization
+library(lubridate)  # For handling dates
+library(knitr)      # For nice tables
+library(scales)     # For better axis formatting
+```
+
+```{r}
+md_va <- tuition_data |> 
+  filter(state %in% c("MD", "VA"))
+
+md_va <- md_va |>
+  mutate(
+    z_23 = scale(X2023_24_tuitionfee_in)[,1]
+  )
+
+```
+
+```{r}
+md_va <- md_va |>
+  mutate(outlier = abs(z_23) > 2)
+
+tab <- table(md_va$state, md_va$outlier)
+tab
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(md_va, aes(x = state, y = z_23, color = outlier)) +
+  geom_jitter(width = 0.2, height = 0, size = 2) +
+  geom_hline(yintercept = c(-2, 2), linetype = "dashed") +
+  labs(
+    title = "Z-Scores of 2023–24 In State-Tuition by State",
+    x = "State",
+    y = "Z-Score"
+  )
+
+```
+```{r}
+tuition_out <- tuition_data |>
+  filter(state %in% c("MD", "VA")) |>
+  mutate(
+    z_score_out = (X2023_24_tuitionfee_out - mean(X2023_24_tuitionfee_out, na.rm = TRUE)) /
+                  sd(X2023_24_tuitionfee_out, na.rm = TRUE),
+    outlier_out = abs(z_score_out) > 2   # define outlier threshold
+  )
+
+```
+
+```{r}
+md_va <- tuition_data |>
+  filter(state %in% c("MD", "VA")) |>
+  mutate(
+    z_23_out = (X2023_24_tuitionfee_out - mean(X2023_24_tuitionfee_out, na.rm = TRUE)) /
+               sd(X2023_24_tuitionfee_out, na.rm = TRUE),
+    outlier_out = abs(z_23_out) > 2
+  )
+
+
+```
+
+```{r}
+outlier_counts_out <- tuition_out |>
+  group_by(state) |>
+  summarize(outlier_count = sum(outlier_out, na.rm = TRUE))
+
+outlier_counts_out
+
+```
+
+```{r}
+ggplot(md_va, aes(x = state, y = z_23_out, color = outlier_out)) +
+  geom_jitter(width = 0.2, height = 0, size = 2) +
+  geom_hline(yintercept = c(-2, 2), linetype = "dashed") +
+  labs(
+    title = "Z-Scores of 2023–24 Out-of-State Tuition by State",
+    x = "State",
+    y = "Z-Score"
+  ) +
+  scale_color_manual(values = c("FALSE" = "gray50", "TRUE" = "red"))
+
+
+```
+These z-score tests and data visualizations show the amount of outliers there are when it comes to both in-state and out of state tuition amounts for both schools in Maryland and Virginia. the null hypothesis is that there are not more schools in Virginia than Maryland whose tuition rates would be considered statistical outliers when compared to both Maryland and Virginia's mean tuition rates within 2023-2024, while the alternative hypothesis is that there are more schools in Virginia than Maryland whose tuition rates would be considered statistical outliers when compared to both Maryland and Virginia's mean tuition rates within 2023-2024. Since the z-score test for in-state tuition shows that there are 7 outlier schools in Maryland, that is schools that have a z-score -scores beyond ±2 which would indicate unusual values that warrant investigation in this case versus 4 outlier schools for Virginia, while the z-score test for out-of state tuition shows that there are 5 outliers for each state, there is only evidence that the null hypothesis that that there are not more schools in Virginia than Maryland whose tuition rates would be considered statistical outliers when compared to both Maryland and Virginia's mean tuition rates within 2023-2024 should be accepted.
+
+#3
+```{r}
+md_change <- tuition_data |>
+  filter(state == "MD") |>
+  pull(tuition_change)
+
+va_change <- tuition_data |>
+  filter(state == "VA") |>
+  pull(tuition_change)
+```
+
+```{r}
+t.test(md_change, va_change,
+       alternative = "greater",
+       var.equal = FALSE)  
+
+```
+
+```{r}
+mean_md <- mean(md_change, na.rm = TRUE)
+mean_va <- mean(va_change, na.rm = TRUE)
+
+mean_md
+mean_va
+```
+This t-tests looks at the rates of tuition increase in Maryland versus that of Virginia with a null hypothesis that the rate that in-state tuition has changed at when it comes to comparing Maryland to Virginia from 2021-2022 to 2023-2024 is not statistically significant, and an alternative hypothesis that the rate that in-state tuition has changed at when it comes to comparing Maryland to Virginia from 2021-2022 to 2023-2024 is statistically significant. Despite the mean increase of Maryland schools' instate tuition from 2021-2022 to 2023-2024 being 732 dollars and Virginia schools within the same period being 589.4679 dollars, the t-test's p-value of 0.1956 being above 0.05 means that we do not have enough evidence to accept the alternative hypothesis that the rate that in-state tuition has changed at when it comes to comparing Maryland to Virginia from 2021-2022 to 2023-2024 is statistically significant, and so we should accept the null hypothesis that the rate that in-state tuition has changed at when it comes to comparing Maryland to Virginia from 2021-2022 to 2023-2024 is not statistically significant instead despite Maryland's tuition amount increasing by more money.
